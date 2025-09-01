@@ -12,6 +12,13 @@ env variable name (SA_PASSWORD here) must be same as in sql depl k8s file
 ```
 kubectl create secret generic mssql --from-literal=SA_PASSWORD="Password1!"    
 ```
+secrets for postgre sql
+```
+kubectl create secret generic postgres-secret \
+  --from-literal=POSTGRES_USER=myuser \
+  --from-literal=POSTGRES_PASSWORD=mypassword \
+  --from-literal=POSTGRES_DB=mydb
+```
 
 ```
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.0/deploy/static/provider/cloud/deploy.yaml
