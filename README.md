@@ -59,3 +59,31 @@ But you can also just run
 kubectl apply -f .
 ```
 and it will automatically apply those files where it detects changes
+
+
+You want to restart deployment that is not in default namespace?
+```
+kubectl rollout restart deployment/name-of-deployment -n name-of-namespace
+```
+
+Check existing namespaces 
+```
+kubectl get namespaces
+```
+Check existing deployments
+```
+kubectl get deployments
+```
+Check existing services
+```
+kubectl get services
+```
+
+Deployment/service is in different namespace?
+```
+kubectl get deployments --namespace=name-of-namespace
+```
+Same for services
+```
+kubectl get services --namespace=name-of-namespace
+```
