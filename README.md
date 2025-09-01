@@ -1,6 +1,6 @@
 MAKE SURE DOCKER DESKTOP IS RUNNING (for kubernetes commands) AND KUBERNETES IS ENABLED
 
-commands in order
+commands in order (Powershell, may encounter errors in bash)
 
 
  use command in .sln directory level. The name (template) must be same as in k8s depl file for the project
@@ -14,10 +14,7 @@ kubectl create secret generic mssql --from-literal=SA_PASSWORD="Password1!"
 ```
 secrets for postgre sql
 ```
-kubectl create secret generic postgres-secret \
-  --from-literal=POSTGRES_USER=myuser \
-  --from-literal=POSTGRES_PASSWORD=mypassword \
-  --from-literal=POSTGRES_DB=mydb
+kubectl create secret generic postgres-secret --from-literal=POSTGRES_USER=myuser --from-literal=POSTGRES_PASSWORD=mypassword --from-literal=POSTGRES_DB=mydb
 ```
 
 ```
