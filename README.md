@@ -1,4 +1,4 @@
-MAKE SURE DOCKER DESKTOP IS RUNNING (for kubernetes commands)
+MAKE SURE DOCKER DESKTOP IS RUNNING (for kubernetes commands) AND KUBERNETES IS ENABLED
 
 commands in order
 
