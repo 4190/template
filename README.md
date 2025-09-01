@@ -1,3 +1,5 @@
+MAKE SURE DOCKER DESKTOP IS RUNNING (for kubernetes commands)
+
 commands in order
 
 
