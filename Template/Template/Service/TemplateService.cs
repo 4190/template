@@ -5,34 +5,26 @@ namespace Template.Service
 {
     public class TemplateService : ITemplateService
     {
-        private readonly EfCoreTemplateRepository _templateRepository;
-        public TemplateService(EfCoreTemplateRepository templateRepository)
+        private readonly ITemplateRepository _templateRepository;
+
+        public TemplateService(ITemplateRepository templateRepository)
         {
             _templateRepository = templateRepository;
         }
-        public Task<TemplateModel> CreateTemplate(TemplateModel model)
-        {
-            return _templateRepository.Add(model);
-        }
 
-        public Task<TemplateModel> DeleteTemplate(int id)
-        {
-            return _templateRepository.Delete(id);
-        }
+        public Task<TemplateModel> CreateTemplate(TemplateModel model) =>
+            _templateRepository.Add(model);
 
-        public Task<List<TemplateModel>> GetAllTemplates()
-        {
-            return _templateRepository.GetAll();
-        }
+        public Task<TemplateModel> DeleteTemplate(int id) =>
+            _templateRepository.Delete(id);
 
-        public Task<TemplateModel> GetTemplateByID(int id)
-        {
-            return _templateRepository.Get(id);
-        }
+        public Task<List<TemplateModel>> GetAllTemplates() =>
+            _templateRepository.GetAll();
 
-        public Task<TemplateModel> UpdateTemplate(TemplateModel model)
-        {
-            return _templateRepository.Update(model);
-        }
+        public Task<TemplateModel> GetTemplateByID(int id) =>
+            _templateRepository.Get(id);
+
+        public Task<TemplateModel> UpdateTemplate(TemplateModel model) =>
+            _templateRepository.Update(model);
     }
 }

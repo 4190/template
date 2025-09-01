@@ -4,7 +4,7 @@ namespace Template.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        DbSet<TemplateModel> Template { get; set; }
+        public DbSet<TemplateModel> Template { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

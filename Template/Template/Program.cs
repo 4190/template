@@ -1,6 +1,4 @@
-
 using Microsoft.EntityFrameworkCore;
-using System.Text;
 using Template.Data;
 using Template.Data.EFCore;
 using Template.Service;
@@ -14,37 +12,38 @@ namespace Template
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
             builder.Services.AddControllers();
             builder.Services.AddRouting(options => options.LowercaseUrls = true);
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
-            //if (builder.Environment.IsProduction())
-            //{
-            //    Console.WriteLine(">>?auth");
-
-            //    StringBuilder sb = new StringBuilder();
-            //    sb.Append(builder.Configuration.GetConnectionString("AuthConn"))
-            //        .Append(Environment.GetEnvironmentVariable("CONNECTION_STRING_CREDS"));
-
-            //    Console.WriteLine(sb.ToString());
-
-            //    builder
-            //        .Services
-            //        .AddDbContext<ApplicationDbContext>
-            //        (opt => opt.UseSqlServer(sb.ToString()));
-            //}
             builder.Services.AddScoped<ITemplateService, TemplateService>();
-            builder.Services.AddScoped<EfCoreTemplateRepository>();
-                builder
-                    .Services
-                    .AddDbContext<ApplicationDbContext>
-                    (opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("Conn")));
 
+            // Select database provider and connection string
+            var dbProvider = builder.Configuration["DatabaseProvider"];
+            if (dbProvider == "SqlServer")
+            {
+                builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseSqlServer(builder.Configuration.GetConnectionString("Conn")));
+                builder.Services.AddScoped<ITemplateRepository, EfCoreTemplateRepository<ApplicationDbContext>>();
+                Console.WriteLine("--> Using SQL Server");
+            }
+            else if (dbProvider == "Postgres")
+            {
+                builder.Services.AddDbContext<PostgresDbContext>(options =>
+                    options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConn")));
+                builder.Services.AddScoped<ITemplateRepository, EfCoreTemplateRepository<PostgresDbContext>>();
+                Console.WriteLine("--> Using Postgres SQL");
+            }
 
+            else
+            {
+                throw new Exception("Invalid or missing DatabaseProvider config. Use 'SqlServer' or 'Postgres'.");
+            }
 
             var app = builder.Build();
+
+            // Apply migrations automatically at startup
+            PrepDb.PrepPopulation(app);
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -53,13 +52,8 @@ namespace Template
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
-            PrepDb.PrepPopulation(app);
-
             app.MapControllers();
-
             app.Run();
         }
     }
