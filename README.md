@@ -24,3 +24,17 @@ kubectl apply -f .
 ```
 kubectl get services 
 ```
+
+In case of problems with NGINX gateway
+
+re-run
+```
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.0/deploy/static/provider/cloud/deploy.yaml
+```
+
+Check if there's ingress-nginx-admission
+```
+kubectl get secret -n ingress-nginx ingress-nginx-admission
+```
+
+If it exists, kubernetes should get ingress running soon
