@@ -38,3 +38,24 @@ kubectl get secret -n ingress-nginx ingress-nginx-admission
 ```
 
 If it exists, kubernetes should get ingress running soon
+
+
+
+Made changes in code of the application?
+Build application and then rebuild docker image. After that use
+```
+kubectl rollout restart deployment/name-of-deployment
+```
+Where name of deployment is the one that had it's image updated so Kubernetes uses newest version.
+
+Made changes in .yaml file in K8S directory?
+```
+kubectl apply -f name-of-file
+```
+where name of file is the one that had changes. 
+
+But you can also just run 
+```
+kubectl apply -f .
+```
+and it will automatically apply those files where it detects changes
