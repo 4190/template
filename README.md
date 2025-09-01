@@ -3,7 +3,7 @@ commands in order
 
  use command in .sln directory level. The name (template) must be same as in k8s depl file for the project
 ```
-docker build -t template -f .\Dockerfile .        
+docker build -t template -f .\Template\Dockerfile .        
 ```
 
 env variable name (SA_PASSWORD here) must be same as in sql depl k8s file
