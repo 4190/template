@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: java-1-depl
+spec:
+    replicas: 1
+    selector: 
+        matchLabels: 
+            app: java-1
+    template:
+        metadata:
+            labels:
+                app: java-1
+        spec:
+            containers:
+                - name: java-1
+                  image: michalkrupka77/java-1:latest
+            imagePullSecrets:
+                - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: java-1-clusterip-srv
+spec:
+    type: ClusterIP
+    selector:
+        app: java-1
+    ports:
+        - name: java-1
+          protocol: TCP
+          port: 8080
+          targetPort: 8080

@@ -5,6 +5,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/use-regex: 'true'
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
     - host: localhost
@@ -15,5 +16,12 @@ spec:
             backend:
               service:
                 name: template-clusterip-srv
+                port:
+                  number: 8080
+          - path: /api/java-1(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: java-1-clusterip-srv
                 port:
                   number: 8080
