@@ -17,3 +17,10 @@ spec:
                 name: template-clusterip-srv
                 port:
                   number: 8080
+          - path: /java-1
+            pathType: Prefix
+            backend:
+              service:
+                name: java-1-clusterip-srv
+                port:
+                  number: 8080
