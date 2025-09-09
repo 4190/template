@@ -1,8 +1,13 @@
-APP<br>
-<button (click)="callApi1()">Call API 1 http://localhost/java-1/get1</button><br>
+APP<br><br>
+<button (click)="callApi1()">Call API 1 http://hackaton.fun:9091/java-1/get1</button><br><br>
 
-<button (click)="callApi2()">Call API 2 http://localhost/java-1/get2</button><br>
+<label for="idInput">Enter ID (between 1 - 8):</label><br>
+<input #idInput id="idInput" type="number" placeholder="Enter ID " /><br>
+<button (click)="callApi2(Number(idInput.value))">Call API 2 http://hackaton.fun:9091/java-1/get2?id=id"</button><br><br>
 
-<button (click)="callApi3()">Call API 3 http://localhost/java-1/get3</button><br>
-<router-outlet></router-outlet> <!-- Angular inserts routed component here -->
+<button (click)="callApi3()">Call API 3 http://localhost/java-1/get3</button><br><br>
+
+<button routerLink="/google-map">Go to Google Component (used routerLink directive)</button><br>
+<button (click)="navigateToGoogleMapComponent()">Go to Google Component (used navigate method)</button><br><br>
+<router-outlet></router-outlet>
 <!--<app-footer></app-footer>-->
