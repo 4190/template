@@ -1,3 +1,20 @@
 <p>
   Test route is working!
 </p>
+
+<br>
+
+<!-- This button calls the new method in your component class -->
+<button (click)="callTemplateApi()">Call In-Cluster API (/api/template/getall)</button>
+
+<!-- This section will display the JSON response from the API if the call is successful -->
+<div *ngIf="response">
+  <h3>API Response:</h3>
+  <pre>{{ response | json }}</pre>
+</div>
+
+<!-- This section will display the error object if the API call fails -->
+<div *ngIf="error">
+  <h3>API Error:</h3>
+  <pre style="color: red;">{{ error | json }}</pre>
+</div>
