@@ -1,0 +1,39 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-srv
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: 'true'
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: hackaton.work
+      http:
+        paths:
+          # --- API Paths (No rewrite needed by Ingress) ---
+          - path: /api/template
+            pathType: Prefix
+            backend:
+              service:
+                name: template-clusterip-srv
+                port:
+                  number: 8080
+          - path: /java-1
+            pathType: Prefix
+            backend:
+              service:
+                name: java-1-clusterip-srv
+                port:
+                  number: 8080
+          
+          # --- Angular Frontend Path ---
+          # This is the new rule. It must be last.
+          # It forwards any request that doesn't match the above paths to your Angular service.
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: angular-frontend-srv
+                port:
+                  number: 80
