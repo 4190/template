@@ -96,13 +96,12 @@ jobs:
           tags: saeqis/angular-frontend:${{ github.sha }}, saeqis/angular-frontend:latest
 
       # --- Kubernetes Deployment ---
-      - name: Set up kubectl
-        uses: azure/k8s-set-context@v4
-        with:
-          # This secret contains the configuration for your remote Kubernetes cluster
-          kubeconfig: ${{ secrets.KUBE_CONFIG }}
-        id: setcontext
-
+      - name: Set up Kubeconfig
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
+        
       - name: Apply Kubernetes manifests
         run: kubectl apply -f K8S/Deploy
 
