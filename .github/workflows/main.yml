@@ -61,9 +61,13 @@ jobs:
           context: ./Template # Directory of the .NET project
           file: ./Template/Template/Dockerfile # Path to the Dockerfile
           push: true
-          tags: saeqis/template:latest
+          tags: saeqis/template:${{ github.sha }}, saeqis/template:latest
 
       # --- Java Application CI/CD ---
+      - name: Make mvnw executable
+        run: chmod +x ./mvnw
+        working-directory: ./java-1
+
       - name: Build Java project with Maven
         run: ./mvnw clean package
         working-directory: ./java-1
@@ -73,7 +77,7 @@ jobs:
         with:
           context: ./java-1
           push: true
-          tags: saeqis/java-1:latest
+          tags: saeqis/java-1:${{ github.sha }}, saeqis/java-1:latest
 
       # --- Angular Application CI/CD ---
       - name: Install Angular dependencies
@@ -89,7 +93,7 @@ jobs:
         with:
           context: ./angular-1
           push: true
-          tags: saeqis/angular-frontend:latest
+          tags: saeqis/angular-frontend:${{ github.sha }}, saeqis/angular-frontend:latest
 
       # --- Kubernetes Deployment ---
       - name: Set up kubectl
