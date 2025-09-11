@@ -1,11 +1,8 @@
-# This workflow builds, tests, and deploys three separate applications:
-# 1. A .NET application
-# 2. A Java (Spring Boot) application
-# 3. An Angular application
-# It builds each application, creates a Docker image, pushes it to Docker Hub,
-# and finally deploys the changes to a Kubernetes cluster.
+# This workflow is configured to run on a self-hosted runner.
+# It builds a .NET, Java, and Angular application, pushes them to Docker Hub,
+# and deploys them to the local Kubernetes cluster on the same server.
 
-name: Build and Deploy Full Stack Application
+name: Build and Deploy Full Stack Application (Self-Hosted)
 
 on:
   push:
@@ -15,33 +12,20 @@ on:
 
 jobs:
   build-and-deploy:
-    # Use a GitHub-hosted runner with the latest Ubuntu version
-    runs-on: ubuntu-latest
+    # This now targets your self-hosted runner
+    runs-on: self-hosted
 
     steps:
       # Step 1: Check out your repository code
+      # This will check out the code into the runner's working directory on your server.
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Step 2: Set up all necessary environments (Java, .NET, Node.js)
-      - name: Set up JDK 17 for Java build
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-      
-      - name: Set up .NET 8 for .NET build
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.0.x'
-          
-      - name: Set up Node.js for Angular build
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+      # NOTE: The setup steps for Java, .NET, and Node.js are removed.
+      # It is expected that these are already installed on your self-hosted runner machine
+      # as part of the setup process outlined in the guide.
 
-      # Step 3: Log in to Docker Hub
-      # This uses secrets to securely log in without exposing your credentials.
+      # Step 2: Log in to Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -58,12 +42,16 @@ jobs:
       - name: Build and push .NET Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./Template # Directory of the .NET project
-          file: ./Template/Template/Dockerfile # Path to the Dockerfile
+          context: ./Template
+          file: ./Template/Template/Dockerfile
           push: true
-          tags: saeqis/template:latest
+          tags: saeqis/template:${{ github.sha }}, saeqis/template:latest
 
       # --- Java Application CI/CD ---
+      - name: Make mvnw executable
+        run: chmod +x ./mvnw
+        working-directory: ./java-1
+
       - name: Build Java project with Maven
         run: ./mvnw clean package
         working-directory: ./java-1
@@ -73,7 +61,7 @@ jobs:
         with:
           context: ./java-1
           push: true
-          tags: saeqis/java-1:latest
+          tags: saeqis/java-1:${{ github.sha }}, saeqis/java-1:latest
 
       # --- Angular Application CI/CD ---
       - name: Install Angular dependencies
@@ -89,22 +77,18 @@ jobs:
         with:
           context: ./angular-1
           push: true
-          tags: saeqis/angular-frontend:latest
+          tags: saeqis/angular-frontend:${{ github.sha }}, saeqis/angular-frontend:latest
 
       # --- Kubernetes Deployment ---
-      - name: Set up kubectl
-        uses: azure/k8s-set-context@v4
-        with:
-          # This secret contains the configuration for your remote Kubernetes cluster
-          kubeconfig: ${{ secrets.KUBE_CONFIG }}
-        id: setcontext
-
+      # NOTE: The kubeconfig setup step is removed. The runner uses the local kubectl
+      # on the server, which is already configured to access the K3s cluster.
       - name: Apply Kubernetes manifests
-        run: kubectl apply -f K8S/Deploy
+        # Use 'sudo' because the k3s kubectl command requires root privileges.
+        run: sudo kubectl apply -f K8S/Deploy
 
       - name: Rollout restart deployments
         run: |
-          kubectl rollout restart deployment template-depl
-          kubectl rollout restart deployment java-1-depl
-          kubectl rollout restart deployment angular-frontend-depl
+          sudo kubectl rollout restart deployment template-depl
+          sudo kubectl rollout restart deployment java-1-depl
+          sudo kubectl rollout restart deployment angular-frontend-depl
 
