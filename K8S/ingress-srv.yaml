@@ -11,6 +11,7 @@ spec:
     - host: localhost
       http:
         paths:
+          # --- API Paths (No rewrite needed by Ingress) ---
           - path: /api/template
             pathType: Prefix
             backend:
@@ -25,3 +26,14 @@ spec:
                 name: java-1-clusterip-srv
                 port:
                   number: 8080
+          
+          # --- Angular Frontend Path ---
+          # This is the new rule. It must be last.
+          # It forwards any request that doesn't match the above paths to your Angular service.
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: angular-frontend-srv
+                port:
+                  number: 80
