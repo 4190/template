@@ -59,7 +59,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./Template # Directory of the .NET project
-          dockerfile: ./Template/Template/Dockerfile # Path to the Dockerfile
+          file: ./Template/Template/Dockerfile # Path to the Dockerfile
           push: true
           tags: saeqis/template:latest
 
