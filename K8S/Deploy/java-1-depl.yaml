@@ -25,6 +25,8 @@ spec:
             labels:
                 app: java-1-depl
         spec:
+            imagePullSecrets:
+            - name: regcred
             containers:
             - name: java-1
               image: saeqis/java-1:latest

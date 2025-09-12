@@ -12,6 +12,8 @@ spec:
       labels:
         app: angular-frontend
     spec:
+      imagePullSecrets:
+        - name: regcred
       containers:
         - name: angular-frontend
           image: saeqis/angular-frontend:latest

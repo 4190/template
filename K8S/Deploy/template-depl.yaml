@@ -12,6 +12,8 @@ spec:
             labels:
                 app: template
         spec:
+            imagePullSecrets:
+                - name: regcred
             containers:
                 - name: template
                   image: saeqis/template:latest
