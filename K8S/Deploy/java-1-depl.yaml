@@ -29,5 +29,5 @@ spec:
             - name: regcred
             containers:
             - name: java-1
-              image: saeqis/java-1:latest
+              image: michalkrupka77/java-1:latest
               imagePullPolicy: Always
