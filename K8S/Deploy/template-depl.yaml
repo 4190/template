@@ -14,7 +14,7 @@ spec:
         spec:
             containers:
                 - name: template
-                  image: saeqis/template:latest
+                  image: michalkrupka77/template:latest
                   imagePullPolicy: Always
 ---
 apiVersion: v1

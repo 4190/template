@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: angular-frontend
-          image: saeqis/angular-frontend:latest
+          image: michalkrupka77/angular-1:latest
           imagePullPolicy: Always
 ---
 apiVersion: v1
