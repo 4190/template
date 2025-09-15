@@ -27,8 +27,5 @@ spec:
         spec:
             containers:
             - name: java-1
-              image: michalkrupka77/java-1:latest
-              ports:
-              - containerPort: 9091
-            imagePullSecrets:
-                - name: regcred
+              image: java-1
+              imagePullPolicy: Never

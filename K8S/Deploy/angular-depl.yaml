@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: angular-frontend-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: angular-frontend
+  template:
+    metadata:
+      labels:
+        app: angular-frontend
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: angular-frontend
+          image: michalkrupka77/angular-1:latest
+          imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: angular-frontend-srv
+spec:
+  type: ClusterIP
+  selector:
+    app: angular-frontend
+  ports:
+    - port: 80
+      targetPort: 80
