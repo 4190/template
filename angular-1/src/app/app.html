@@ -1,2 +1,48 @@
+<!-- Main navigation - hidden on google-map route -->
+<div class="main-content" *ngIf="!isGoogleMapRoute()">
+  <div class="app-header">
+    <h1>🚀 Angular Application</h1>
+    <p>Test your APIs and explore Google Maps integration</p>
+  </div>
+  
+  <div class="api-section">
+    <h2>API Testing</h2>
+    <div class="api-buttons">
+      <button class="api-btn" (click)="callApi1()">
+        📡 Call API 1
+        <small>http://hackaton.fun:9091/java-1/get1</small>
+      </button>
+      
+      <div class="api-input-group">
+        <label for="idInput">Enter ID (between 1 - 8):</label>
+        <input #idInput id="idInput" type="number" placeholder="Enter ID" min="1" max="8" />
+        <button class="api-btn" (click)="callApi2(Number(idInput.value))">
+          📡 Call API 2
+          <small>http://hackaton.fun:9091/java-1/get2?id=id</small>
+        </button>
+      </div>
+      
+      <button class="api-btn" (click)="callApi3()">
+        📡 Call API 3
+        <small>http://localhost/java-1/get3</small>
+      </button>
+    </div>
+  </div>
+  
+  <div class="navigation-section">
+    <h2>🗺️ Google Maps</h2>
+    <div class="nav-buttons">
+      <button class="nav-btn primary" routerLink="/google-map">
+        🌍 Open Tourist Attractions Finder
+      </button>
+      <button class="nav-btn secondary" (click)="navigateToGoogleMapComponent()">
+        🧭 Navigate to Maps (programmatic)
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Router outlet for all routes -->
 <router-outlet></router-outlet>
+
 <!--<app-footer></app-footer>-->

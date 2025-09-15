@@ -1,1 +1,123 @@
-<p>google-map works!</p>
+<div class="map-page">
+  <!-- Header -->
+  <div class="header">
+    <h1>🗺️ Tourist Attractions Finder</h1>
+    <p class="subtitle">Click on the map to select a location and discover amazing places nearby!</p>
+  </div>
+
+  <!-- Map loading indicator -->
+  <div *ngIf="!isMapLoaded" class="loading-indicator">
+    <div class="spinner"></div>
+    <p>Loading Google Maps...</p>
+  </div>
+
+  <!-- Main Map Container -->
+  <div class="map-container" *ngIf="isMapLoaded">
+    <google-map 
+      [center]="center"
+      [zoom]="zoom"
+      [options]="mapOptions"
+      (mapClick)="onMapClick($event)"
+      (mapInitialized)="onMapReady($event)"
+      width="100%"
+      height="500px">
+    </google-map>
+    
+    <!-- Map Controls Overlay -->
+    <div class="map-controls" *ngIf="selectedCoordinates">
+      <div class="coordinates-display">
+        <span class="coordinates-label">📍 Selected Location:</span>
+        <div class="location-info">
+          <div class="location-name" *ngIf="selectedLocationName">
+            {{selectedLocationName}}
+          </div>
+          <span class="coordinates-value">
+            {{selectedCoordinates.lat | number:'1.6-6'}}, {{selectedCoordinates.lng | number:'1.6-6'}}
+          </span>
+        </div>
+      </div>
+      
+      <div class="action-buttons">
+        <button 
+          class="find-btn" 
+          (click)="findTouristAttractions()"
+          [disabled]="isLoadingAttractions">
+          <span *ngIf="!isLoadingAttractions">🔍 Find Tourist Attractions</span>
+          <span *ngIf="isLoadingAttractions">
+            <div class="btn-spinner"></div>
+            Searching...
+          </span>
+        </button>
+        
+        <button 
+          class="clear-btn" 
+          (click)="clearSelection()"
+          [disabled]="isLoadingAttractions">
+          🗑️ Clear Selection
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Instructions -->
+  <div class="instructions" *ngIf="!selectedCoordinates && isMapLoaded">
+    <div class="instruction-card">
+      <h3>🎯 How to use:</h3>
+      <ol>
+        <li>Click anywhere on the map to select a location</li>
+        <li>Click "Find Tourist Attractions" to discover nearby places</li>
+        <li>Explore the recommended attractions below!</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div class="error-message" *ngIf="errorMessage">
+    <div class="error-card">
+      <span class="error-icon">⚠️</span>
+      <span class="error-text">{{errorMessage}}</span>
+    </div>
+  </div>
+
+  <!-- Tourist Attractions Results -->
+  <div class="attractions-section" *ngIf="attractions.length > 0">
+    <h2 class="attractions-title">🌟 Recommended Tourist Attractions</h2>
+    
+    <div class="attractions-grid">
+      <div 
+        class="attraction-card" 
+        *ngFor="let attraction of attractions; let i = index"
+        [style.animation-delay]="i * 0.1 + 's'">
+        
+        <div class="attraction-header">
+          <span class="attraction-icon">{{getCategoryIcon(attraction.category)}}</span>
+          <div class="attraction-title-section">
+            <h3 class="attraction-name">{{attraction.name}}</h3>
+            <span class="attraction-category">{{attraction.category | titlecase}}</span>
+          </div>
+        </div>
+        
+        <p class="attraction-description">{{attraction.description}}</p>
+        
+        <div class="attraction-footer">
+          <button
+            class="focus-btn"
+            (click)="focusOnAttraction(attraction)"
+            *ngIf="attraction.coordinates">
+            📍 Show on Map
+          </button>
+          <span class="attraction-number">#{{i + 1}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- API Key Configuration Notice -->
+  <div class="api-notice" *ngIf="openAiApiKey === 'YOUR_OPENAI_API_KEY'">
+    <div class="notice-card">
+      <h4>🔑 Configuration Required</h4>
+      <p>To use the tourist attractions feature, please configure your OpenAI API key in the component.</p>
+      <p>Replace <code>YOUR_OPENAI_API_KEY</code> with your actual API key.</p>
+    </div>
+  </div>
+</div>
